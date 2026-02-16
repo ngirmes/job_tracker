@@ -1,0 +1,23 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/ngirmes/job_tracker#readme",
+  "bugs": {
+    "url": "https://github.com/ngirmes/job_tracker/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ngirmes/job_tracker.git"
+  },
+  "license": "ISC",
+  "author": "Nicholas Girmes",
+  "type": "commonjs",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
