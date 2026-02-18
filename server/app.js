@@ -21,7 +21,7 @@ const jsonParser = (req, res, next) => {
             data += chunk
         })
 
-        req.on('end', () => {
+        req.on('end', () => { 
             if (!data) {
                 req.body = {}
                 return next()
@@ -46,19 +46,8 @@ app.get('/', (req, res) => {
     res.send('Hello World!')
 })
 
-app.get('/jobs', (req, res) => {
-     let jobs = ''
-
-    try {
-    jobs = db.all(
-        `SELECT * FROM jobs`
-    )
-    res.send(jobs)
-    }
-    
-    catch (err) {
-        res.send(err.message)
-    }
+app.get('/jobs', (req, res) =>{
+    res.send(placeholder_data)
 })
 
 app.post('/jobs', jsonParser, (req, res) => {
