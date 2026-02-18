@@ -4,8 +4,10 @@ const port = 3000
 
 const db = require('./db')
 
+const today = Date();
+
 const myLogger = function(req, res, next){
-    console.log('LOGGED')
+    console.log(`LOGGED at ${today}`)
     next()
 }
 
@@ -44,18 +46,36 @@ app.get('/', (req, res) => {
     res.send('Hello World!')
 })
 
-app.get('/jobs', (req, res) =>{
-    res.send(placeholder_data)
+app.get('/jobs', (req, res) => {
+     let jobs = ''
+
+    try {
+    jobs = db.all(
+        `SELECT * FROM jobs`
+    )
+    res.send(jobs)
+    }
+    
+    catch (err) {
+        res.send(err.message)
+    }
 })
 
 app.post('/jobs', jsonParser, (req, res) => {
-    // parse user data
-    // add to database
-    // send confirmation to user
-})
+    const {company, role, status} = req.body
+    const sql = `INSERT INTO jobs (company, role, status) VALUES (?, ?, ?)`
+    const params = [company, role, status]
 
-app.update('/jobs:id', (req, res) => {
-    res.send(updated_job)
+    db.run(sql, params, function(err) {
+        if (err) {
+            return res.status(500).json({error: err.message})
+        }
+
+        res.json({
+            message: 'Job added successfully',
+            job: { id: this.lastID, company, role, status}
+        })
+    })
 })
 
 app.delete('/jobs:id', (req, res) => {
