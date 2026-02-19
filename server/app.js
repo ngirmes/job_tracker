@@ -35,6 +35,25 @@ function jsonParser (req, res, next) {
     })
 } 
 
+function validateUser (req, res, next) {
+
+    const { user_ID } = req.params
+
+    if (!typeof(user_ID) === int) {
+        res.status(500).json({err: err.message})
+    }
+
+    db.all(`SELECT id FROM users`, (err, rows) => {
+        if (err) {
+            res.send(err.message)
+        }
+        else if (!rows.includes(user_ID)){
+            res.status(500).json({message: 'User id does not exist'})
+        }
+        next()
+    })
+}
+
 function validateStatus (req, res, next) {
     const { status } = req.body
     const validStatus = ['applied', 'offer', 'interviewed', 'rejected']
@@ -67,10 +86,27 @@ app.get('/jobs', (req, res) => {
     })
 })
 
-app.post('/jobs', jsonParser, validateStatus, (req, res) => {
+app.post('/create-user', jsonParser, (req, res) => {
+    const { username } = req.body
+    const sql = `INSERT INTO users (username) = ?`
+
+    db.run(sql, username, function(err) {
+        if (err) {
+            return res.status(500).json({error: err.message})
+        }
+
+        res.json({
+            message: 'User created successfully',
+            user: { id: this.lastID, username }
+        })
+    })
+})
+
+app.post('/jobs/:user_ID', jsonParser, validateStatus, (req, res) => {
+    const { user_ID } = req.params
     const {company, role, status} = req.body
-    const sql = `INSERT INTO jobs (company, role, status) VALUES (?, ?, ?)`
-    const params = [company, role, status]
+    const sql = `INSERT INTO jobs (user_ID, company, role, status) VALUES (?, ?, ?, ?)`
+    const params = [user_ID, company, role, status]
 
     db.run(sql, params, function(err) {
         if (err) {
@@ -79,7 +115,7 @@ app.post('/jobs', jsonParser, validateStatus, (req, res) => {
 
         res.json({
             message: 'Job added successfully',
-            job: { id: this.lastID, company, role, status}
+            job: { id: this.lastID, user_ID, company, role, status}
         })
     })
 })

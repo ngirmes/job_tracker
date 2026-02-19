@@ -9,13 +9,25 @@ const db = new sqlite3.Database('./jobs.db', (err) =>  {
     }
 })
 
-db.run(`
-    CREATE TABLE IF NOT EXISTS jobs (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        company TEXT,
-        role TEXT,
-        status TEXT
-    )
-`)
+db.serialize (() => {
+
+    db.run(`
+        CREATE TABLE IF NOT EXISTS users (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            username TEXT NOT NULL
+        )
+    `)
+
+    db.run(`
+        CREATE TABLE IF NOT EXISTS jobs (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_ID INTEGER NOT NULL,
+            company TEXT NOT NULL,
+            role TEXT NOT NULL,
+            status TEXT NOT NULL,
+            FOREIGN KEY (user_ID) REFERENCES users(id)
+        ), 
+    `)
+})
 
 module.exports = db
