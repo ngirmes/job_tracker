@@ -51,7 +51,7 @@ function jsonParser (req, res, next) {
 } 
 
 // Validate that the user exists before posting a job
-function validateUser (req, res, next) {
+function validateUserExists (req, res, next) {
 
     // Extract user_ID from params and coerce to Number
     const user_ID = Number(req.params.user_ID)
@@ -77,7 +77,7 @@ function validateUser (req, res, next) {
 }
 
 // Validate that the status field is present and valid
-function validateStatus (req, res, next) {
+function validateStatusParam (req, res, next) {
     const { status } = req.body
     const validStatus = ['applied', 'offer', 'interviewed', 'rejected']
 
@@ -92,13 +92,14 @@ function validateStatus (req, res, next) {
 }
 
 async function validateAndHashPassword (req, res, next) {
+
     const {password} = req.body
 
     if (!password) {
         return res.status(400).json({message: 'User must enter a password'})
     }
     else if (password.length < 8) {
-        return res.status(400).json({message: 'Password must be longer than eight characters'})
+        return res.status(400).json({message: 'Password must be at least eight characters'})
     }
 
     try {
@@ -111,6 +112,21 @@ async function validateAndHashPassword (req, res, next) {
     }
 
     
+}
+
+function checkValidEmail (req, res, next) {
+    const { email } = req.body
+    const sql = `SELECT 1 FROM users WHERE email = ?`
+
+    db.get(sql, email, (err, row) => {
+        if(err) {
+            return res.status(500).json({error: err.message})
+        }
+        else if (row) {
+            return res.status(400).json({message: 'User already exists'})
+        }
+        next()
+    })
 }
 
 // Global Middleware
@@ -128,16 +144,8 @@ app.get('/', (req, res) => {
 // Auth Routes
 // ***
 
-app.post('/auth/register', jsonParser, validateAndHashPassword, (req, res) => {
+app.post('/auth/register', jsonParser, checkValidEmail, validateAndHashPassword, (req, res) => {
 
-} )
-
-app.post('/auth/login', jsonParser, (req, res) => {
-
-})
-
-// Create new user
-app.post('/users', jsonParser, (req, res) => {
     const { email, password } = req.body
     const sql = `INSERT INTO users (email, password) VALUES (?, ?)`
 
@@ -146,11 +154,15 @@ app.post('/users', jsonParser, (req, res) => {
             return res.status(500).json({error: err.message})
         }
 
-        res.json({
+        res.status(200).json({
             message: 'User created successfully',
-            user: { id: this.lastID, username }
+            user: { id: this.lastID, email, password }
         })
     })
+})
+
+app.get('/auth/login', jsonParser, (req, res) => {
+
 })
 
 // ***
@@ -171,9 +183,10 @@ app.get('/jobs', (req, res) => {
 })
 
 // Create a new job for a specific user
-app.post('/jobs/:user_ID', jsonParser, validateUser, validateStatus, (req, res) => {
+app.post('/jobs/:user_ID', jsonParser, validateUserExists, validateStatusParam, (req, res) => {
+
     const { user_ID } = req.params
-    const {company, role, status} = req.body
+    const { company, role, status } = req.body
 
     // Parameterized SQL prevents SQL injection
     const sql = `INSERT INTO jobs (user_ID, company, role, status) VALUES (?, ?, ?, ?)`
@@ -193,7 +206,7 @@ app.post('/jobs/:user_ID', jsonParser, validateUser, validateStatus, (req, res) 
 })
 
 // Update a job’s status
-app.patch('/jobs/:id', jsonParser, validateStatus, (req, res) => {
+app.patch('/jobs/:id', jsonParser, validateStatusParam, (req, res) => {
     const { id } = req.params
     const { status } = req.body
     const sql = `UPDATE jobs SET status = ? WHERE id = ?`
