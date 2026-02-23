@@ -1,0 +1,16 @@
+// Validate that the status field is present and valid
+function validateParamStatus (req, res, next) {
+    const { status } = req.body
+    const validStatus = ['applied', 'offer', 'interviewed', 'rejected']
+
+    if (!status) {
+        res.status(400).json({message: 'Status is required'})
+    }
+    else if (!validStatus.includes(status)) {
+        res.status(400).json({message: `Status must be one of: ${allowedStatuses.join(', ')}`})
+    }
+    
+    next()
+}
+
+module.exports = validateParamStatus
