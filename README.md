@@ -1,33 +1,46 @@
-ls# Project Overview
+# Job Tracker API
 
-- This project is a full‑stack CRUD (Create, Read, Update, Delete) web application designed to track job applications in a simple and practical way. Users can add, view, update, and delete job entries, making it a realistic example of how data‑driven applications are built and maintained.
-- The goal of this project is to demonstrate a solid understanding of core full‑stack development concepts.
+A full-stack CRUD web application for tracking job applications with multi-user support, secure authentication, and email verification. Built to demonstrate industry-standard backend and frontend practices.
 
 ## Tech Stack
 
-- Frontend: React
-  - This project uses React to build a component-based user interface for managing job applications. React handles rendering, user input, and application state, making it easy to display data from the backend and update the UI as that data changes.
-- Backend: Node.js + Express
-  - This project uses Express to create a simple RESTful API for managing job application data. Express handles incoming HTTP requests and routes them to the appropriate logic, acting as the connection between the React frontend and the database.
-- Database: SQLite (or in‑memory storage for simplicity)
-  - This project uses SQLite to store job application data in a simple, lightweight relational database. SQLite allows the application to persist data without requiring a separate database server, keeping the project focused on core full-stack concepts.
-- Version Control & Hosting: GitHub
+- Frontend: React — dynamic UI for job management (to be implemented)
+- Backend: Node.js + Express — RESTful API with modular routes and middleware
+- Database: SQLite — persistent storage with relational tables (users, jobs)
+- Authentication & Security:
+- Password hashing with bcrypt
+- JWT authentication (in progress)
+- Email verification via unique tokens (in progress)
+- Email Handling: Nodemailer or similar library (in progress)
+- Version Control: GitHub
 
-## What This Project Demonstrates
+## Key Features
 
-- Building a RESTful API using Express
-- Implementing all four CRUD operations:
-  1.  Create new records
-  2.  Read existing data
-  3.  Update records
-  4.  Delete records
+- CRUD Operations: Create, read, update, and delete job entries
+- Multi-user Support: Jobs linked to unique user_ID
+- Validation & Middleware:
+- JSON parsing
+- Input validation (status, email, etc.)
+- Request logging
+- Authentication:
+- Secure registration and login
+- JWT-based access for protected routes
+- Email verification workflow
+- Error Handling: Returns meaningful HTTP status codes and messages
 
-- Connecting a React frontend to a backend API
-- Managing application state and user input
-- Structuring a small but complete full‑stack application
-- Writing clear, maintainable code with a defined scope
+## Why This Project Matters
 
-## Why These Concepts Matter
+- Demonstrates real-world backend patterns like authentication, validation, and token management
+- Shows secure, maintainable, and modular code architecture
+- Teaches data flow between frontend, backend, and database, emphasizing multi-user systems
+- A strong portfolio piece for full-stack development and API design roles
 
-- CRUD operations form the foundation of most real‑world software systems — from social media platforms to banking applications. Understanding how data flows between a frontend, backend, and database is essential for any software engineering role.
-- This project focuses on fundamentals that scale, making it a strong example of practical problem‑solving and real‑world application development.
+## Future Improvements
+
+- Complete authentication using JWT and email verification
+- Error handling middleware
+- Add password reset workflow
+- Deployment (.env usage, environment variables, render/railway/fly.io)
+- Develop frontend
+- Implement role-based access control for admins
+- Deploy API with HTTPS and environment-based configuration
