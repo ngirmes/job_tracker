@@ -1,0 +1,21 @@
+Concepts I want to add and why:
+- middleware, which is used for "cross-cutting concerns" (such as authentication, logging, and error management), 
+    logic that applies to many routes, not just one"
+    - "Think of middleware like the security checkpoint at an airport. Each request (or passenger) goes through 
+        multiple layers of checks — authentication, validation, logging — before reaching the final gate (the route handler)."
+
+        'npm install sqlite3'
+
+Starting Express server:
+locate app.js
+node app.js in terminal
+http://localhost:3000/
+
+Using postman to test API endpoints
+functions having a 'this' but arrow functions not
+Using this.changes
+The concept of middleware
+SQL params needing to be in the correct order in db methods
+
+SQLite cheat sheet
+https://www.sqlitetutorial.net/sqlite-cheat-sheet/

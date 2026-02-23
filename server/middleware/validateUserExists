@@ -4,7 +4,7 @@ const db = require('../db/db')
 function validateUserExists (req, res, next) {
 
     // Extract user_ID from params and coerce to Number
-    const user_ID = Number(req.params.user_ID)
+    const user_ID = Number(req.user.user_ID)
 
     if (Number.isNaN(user_ID)) {
         return res.status(400).json({message: 'Invalid user ID'})

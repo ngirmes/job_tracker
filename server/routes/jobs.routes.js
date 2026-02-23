@@ -4,27 +4,33 @@ const router = express.Router()
 const jsonParser = require('../middleware/jsonParser')
 const validateUserExists = require('../middleware/validateUserExists')
 const validateParamStatus = require('../middleware/validateParamStatus')
+const authenticateToken = require('../middleware/authenticateToken')
 
 // Import database connection (SQLite)
 const db = require('../db/db')
 
-router.get('/', (req, res) => {
-    db.all(`SELECT * FROM jobs`, (err, rows) => {
+router.get('/', authenticateToken, (req, res) => {
+
+    const user_ID = req.user.user_ID
+    console.log(user_ID)
+
+    db.all(`SELECT * FROM jobs where user_ID = ?`, user_ID, (err, rows) => {
+        
         if (err) {
-            res.send(err.message)
+            return res.status(500).json({error: err.message})
         }
-        else {
-            // Return JSON array of all jobs
-            res.json(rows)
+        if (!rows) {
+            return res.status(400).json({error: 'No jobs found'})
         }
+        res.json(rows)
 
     })
 })
 
 // Create a new job for a specific user
-router.post('/:user_ID', jsonParser, validateUserExists, validateParamStatus, (req, res) => {
+router.post('/', authenticateToken, jsonParser, validateUserExists, validateParamStatus, (req, res) => {
 
-    const { user_ID } = req.params
+    const user_ID = req.user.user_ID
     const { company, role, status } = req.body
 
     // Parameterized SQL prevents SQL injection
