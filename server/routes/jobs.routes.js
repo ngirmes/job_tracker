@@ -8,10 +8,9 @@ const jsonParser = require('../middleware/jsonParser')
 const validateUserExists = require('../middleware/validateUserExists')
 const validateParamStatus = require('../middleware/validateParamStatus')
 
-
 router.get('/', authenticateToken, getJobs)
 // Create a new job for a specific user
-router.post('/', authenticateToken, jsonParser, validateUserExists, validateParamStatus, postJob)
+router.post('/', authenticateToken, jsonParser, validateParamStatus, postJob)
 // Update a job’s status
 router.patch('/:id', authenticateToken, jsonParser, validateParamStatus, patchJob)
 // Delete a job by ID

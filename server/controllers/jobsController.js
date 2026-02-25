@@ -22,11 +22,11 @@ async function getJobs(req, res) {
 
 async function postJob(req, res) {
     const user_ID = req.user.user_ID
-    const { company, role, status } = req.body
+    const { company, role, status, dateApplied } = req.body
 
     // Parameterized SQL prevents SQL injection
-    const sql = `INSERT INTO jobs (user_ID, company, role, status) VALUES (?, ?, ?, ?)`
-    const params = [user_ID, company, role, status]
+    const sql = `INSERT INTO jobs (user_ID, company, role, status, dateApplied) VALUES (?, ?, ?, ?, ?)`
+    const params = [user_ID, company, role, status, dateApplied]
 
     db.run(sql, params, function(err) {
         if (err) {
@@ -34,9 +34,9 @@ async function postJob(req, res) {
         }
 
         // Return success message and the new job’s ID
-        res.json({
+        res.status(201).json({
             message: 'Job added successfully',
-            job: { id: this.lastID, user_ID, company, role, status}
+            job: { id: this.lastID, user_ID, company, role, status, dateApplied}
         })
     })
 }

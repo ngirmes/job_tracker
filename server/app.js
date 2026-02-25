@@ -4,11 +4,12 @@ const app = express()
 const port = 3000
 const cors = require('cors')
 
-// Capture current date/time for logging
-const myLogger = require('./middleware/myLogger')
 app.use(cors({
     origin: 'http://localhost:5173'
 }))
+
+const myLogger = require('./middleware/myLogger')
+
 app.use(myLogger)
 app.use('/auth', require('./routes/auth.routes'))
 app.use('/jobs', require('./routes/jobs.routes'))
