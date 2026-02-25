@@ -2,8 +2,12 @@ const db = require('../db/db')
 
 async function getJobs(req, res) {
     const user_ID = req.user.user_ID
+    const limit = req.query.limit || 3
+    const page = req.query.page || 1
+    const offset = (page - 1) * limit
+    const sql = `SELECT * FROM jobs where user_ID = ? LIMIT ? OFFSET ?`
 
-    db.all(`SELECT * FROM jobs where user_ID = ?`, user_ID, (err, rows) => {
+    db.all(sql, [user_ID, limit, offset], (err, rows) => {
         
         if (err) {
             return res.status(500).json({error: err.message})
