@@ -1,6 +1,7 @@
 const db = require('../db/db')
 
 async function getJobs(req, res) {
+
     const user_ID = req.user.user_ID
     const limit = req.query.limit || 3
     const page = req.query.page || 1
@@ -21,6 +22,7 @@ async function getJobs(req, res) {
 }
 
 async function postJob(req, res) {
+
     const user_ID = req.user.user_ID
     const { company, role, status, dateApplied } = req.body
 
@@ -42,12 +44,13 @@ async function postJob(req, res) {
 }
 
 async function patchJob(req, res) {
+
     const user_ID = req.user.user_ID
     const { id } = req.params
     const { status } = req.body
     const sql = `UPDATE jobs SET status = ? WHERE user_ID = ? AND id = ?`
 
-    db.run(sql, status, user_ID, id, function (err) {
+    db.run(sql, [status, user_ID, id], function (err) {
         if (err) {
             res.status(500).json({error: err.message})
         }

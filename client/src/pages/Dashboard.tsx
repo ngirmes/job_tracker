@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { data, useNavigate } from "react-router-dom";
 
 export default function Dashboard() {
   const [page, setPage] = useState(1)
@@ -13,6 +13,16 @@ export default function Dashboard() {
   useEffect( () => {
     getJobs()}, [page])
 
+  async function checkToken(res: Response) {
+    const data = await res.json();
+    if (res.status === 401 || res.status === 403) {
+      localStorage.removeItem("token");
+      navigate("/login");
+    }
+    console.log(data);
+    setJobs(data);
+  }
+
   async function getJobs() {
     const token = localStorage.getItem("token");
 
@@ -23,13 +33,7 @@ export default function Dashboard() {
       },
     });
 
-    const data = await res.json();
-    if (res.status === 401 || res.status === 403) {
-      localStorage.removeItem("token");
-      navigate("/login");
-    }
-    console.log(data);
-    setJobs(data);
+    checkToken(res)
   }
 
   async function postJob() {
@@ -59,6 +63,32 @@ export default function Dashboard() {
         console.log('where am I')
       }
 
+  }
+
+  async function updateStatus() {
+    const token = localStorage.getItem("token")
+
+    const res = await fetch(`http://localhost:3000/jobs`, {
+      method = "PATCH",
+      body: JSON.stringify({
+        status
+      })
+
+    })
+
+    const data = await res.json
+  }
+
+  async function deleteJob() {
+    const token = localStorage.getItem("token")
+
+    const res = await fetch(`http://localhost:3000/jobs`, {
+      method = "DELETE",
+
+
+    })
+
+    const data = await res.json
   }
 
   return (
