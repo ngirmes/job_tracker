@@ -23,7 +23,6 @@ async function getJobs(req, res) {
             if (err) {
                 return res.status(500).json({error: err.message})
             }
-            console.log({row, rows})
             res.json({row, rows})
 
         })
