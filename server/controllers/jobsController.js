@@ -3,21 +3,30 @@ const db = require('../db/db')
 async function getJobs(req, res) {
 
     const user_ID = req.user.user_ID
-    const limit = req.query.limit || 3
+    const limit = req.query.limit || 5
     const page = req.query.page || 1
     const offset = (page - 1) * limit
+    const sqlCount = `SELECT COUNT(*) AS total FROM jobs WHERE user_ID = ?`
     const sql = `SELECT * FROM jobs where user_ID = ? LIMIT ? OFFSET ?`
 
-    db.all(sql, [user_ID, limit, offset], (err, rows) => {
-        
+
+    db.get(sqlCount, [user_ID], (err, row) => {
         if (err) {
             return res.status(500).json({error: err.message})
         }
-        if (!rows) {
+        else if (row.total === 0) {
             return res.status(400).json({error: 'No jobs found'})
         }
-        res.json(rows)
 
+        db.all(sql, [user_ID, limit, offset], (err, rows) => {
+                
+            if (err) {
+                return res.status(500).json({error: err.message})
+            }
+            console.log({row, rows})
+            res.json({row, rows})
+
+        })
     })
 }
 
@@ -76,7 +85,7 @@ async function deleteJob(req, res) {
             res.status(404).json({error: 'Job not found'})
         }
         else {
-            res.json({message: 'Job Deleted'})
+            res.status(204).send()
         }
     })
 }

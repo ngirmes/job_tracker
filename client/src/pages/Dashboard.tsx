@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 import { data, useNavigate } from "react-router-dom";
+import { Trash2 } from "lucide-react";
 
 export default function Dashboard() {
   const [page, setPage] = useState(1)
+  const limit = 5
+  const [total, setTotal] = useState(0)
   const [jobs, setJobs] = useState<any[]>([]);
   const [company, setCompany] = useState("")
   const [role, setRole] = useState("")
@@ -13,30 +16,27 @@ export default function Dashboard() {
   useEffect( () => {
     getJobs()}, [page])
 
-  async function checkToken(res: Response) {
-    const data = await res.json();
-    if (res.status === 401 || res.status === 403) {
-      localStorage.removeItem("token");
-      navigate("/login");
-    }
-    console.log(data);
-    setJobs(data);
-  }
-
   async function getJobs() {
     const token = localStorage.getItem("token");
 
-    const res = await fetch(`http://localhost:3000/jobs?page=${page}&limit=3`, {
+    const res = await fetch(`http://localhost:3000/jobs?page=${page}&limit=${limit}`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
 
-    checkToken(res)
+    const data = await res.json();
+    if (res.status === 401) {
+      localStorage.removeItem("token");
+      navigate("/login");
+    }
+    setTotal(data.row.total)
+    setJobs(data.rows);
   }
 
   async function postJob() {
+
     const token = localStorage.getItem("token")
   
     const res = await fetch(`http://localhost:3000/jobs`, {
@@ -53,56 +53,99 @@ export default function Dashboard() {
         }),
       });
 
-      const data = await res.json()
+    const data = await res.json();
+    if (data.status === 401) {
+      localStorage.removeItem("token");
+      navigate("/login");
+    }
 
-      if (res.ok) {
-        console.log('Job posted succesfully', data)
-      }
-      else {
-        console.error(data.error)
-        console.log('where am I')
-      }
+    else if (res.ok) {
+      console.log('Job posted succesfully', data)
+      await getJobs()
+    }
+    else {
+      console.error(data.error)
+    }
 
   }
 
-  async function updateStatus() {
+  async function patchStatus(id:number) {
     const token = localStorage.getItem("token")
 
-    const res = await fetch(`http://localhost:3000/jobs`, {
-      method = "PATCH",
+    const res = await fetch(`http://localhost:3000/jobs/${id}`, {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
       body: JSON.stringify({
         status
       })
 
     })
 
-    const data = await res.json
+    const data = await res.json();
+    if (res.status === 401) {
+      localStorage.removeItem("token");
+      navigate("/login");
+    }
+
+    if(res.ok) {
+      console.log(data)
+      setStatus(status)
+      setJobs(prev => prev.map(job => job.id === id ? {...jobs, status: status} : job))
+    }
+    else {
+      console.log(data.error)
+    }
   }
 
-  async function deleteJob() {
+  async function deleteJob(id: number) {
+
+    if (!window.confirm("Delete this job?")) {
+      return
+    }
+
     const token = localStorage.getItem("token")
 
-    const res = await fetch(`http://localhost:3000/jobs`, {
-      method = "DELETE",
-
-
+    const res = await fetch(`http://localhost:3000/jobs/${id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
     })
 
-    const data = await res.json
+     if (res.status === 401) {
+      localStorage.removeItem("token");
+      navigate("/login");
+    }
+
+    // If 204 is returned
+    else if (res.ok) {
+      console.log('Job deleted succesfully')
+      await getJobs()
+    }
+
+    else {
+    const data = await res.json()
+    console.log(data.error)
+    }
   }
 
   return (
     <>
       <>
         <button onClick={getJobs}>Get Jobs</button>
-        <button onClick={() => setPage(page + 1)}>Next</button>
+        <button disabled={page * limit >= total} onClick={() => setPage(page + 1)}>Next</button>
         <button disabled={page===1} onClick={() => setPage(page - 1)}>Previous</button>
         <div>
           {jobs.map((job) => (
             <div key={job.id}>
+              <button onClick={() => patchStatus(job.id)}>Update status</button>
+              <button onClick={() => deleteJob(job.id)}><Trash2 size={14}/></button>
               <h3>{job.company}</h3>
               <p>{job.role}</p>
               <p>{job.status}</p>
+              <p>{job.dateApplied}</p>
             </div>
           ))}
         </div>

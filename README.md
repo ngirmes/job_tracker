@@ -4,12 +4,15 @@ A full-stack CRUD web application for tracking job applications with multi-user 
 
 ## Tech Stack
 
-- Frontend: React — dynamic UI for job management (to be implemented)
-- Backend: Node.js + Express — RESTful API with modular routes and middleware
-- Database: SQLite — persistent storage with relational tables (users, jobs)
-- Authentication & Security:
+### Frontend: 
+- React with tailwind and lucide — dynamic UI for job management 
+### Backend: 
+- Node.js + Express — RESTful API with modular routes and middleware
+### Database: 
+- SQLite — persistent storage with relational tables (users, jobs)
+### Authentication & Security:
 - Password hashing with bcrypt
-- JWT authentication (in progress)
+- JWT authentication
 - Email verification via unique tokens (in progress)
 - Email Handling: Nodemailer or similar library (in progress)
 - Version Control: GitHub
@@ -37,10 +40,10 @@ A full-stack CRUD web application for tracking job applications with multi-user 
 
 ## Future Improvements
 
-- Complete authentication using JWT and email verification
+- Complete email verification
 - Error handling middleware
 - Add password reset workflow
 - Deployment (.env usage, environment variables, render/railway/fly.io)
-- Develop frontend
+- Develop UX
 - Implement role-based access control for admins
 - Deploy API with HTTPS and environment-based configuration
