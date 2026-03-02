@@ -2,14 +2,18 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 
-export default function Login() {
+type LoginProps = {
+  setIsAuthenticated: (value: boolean) => void;
+};
+
+export default function Login({ setIsAuthenticated }: LoginProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    
+
     const res = await fetch("http://localhost:3000/auth/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -20,6 +24,7 @@ export default function Login() {
 
     if (res.ok) {
       localStorage.setItem("token", data.token);
+      setIsAuthenticated(true);
       navigate("/dashboard");
     } else {
       alert(data.error);
