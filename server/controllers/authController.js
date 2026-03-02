@@ -45,4 +45,8 @@ async function login(req, res) {
     })
 }
 
-module.exports = {register, login}
+async function getMe(req, res) {
+    res.status(200).json({user: req.user})
+}
+
+module.exports = {register, login, getMe}
