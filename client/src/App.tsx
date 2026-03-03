@@ -1,8 +1,9 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Login from "./pages/Login";
-//import Register from "./pages/Register"
+import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
+import Navbar from "./components/Navbar";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -32,8 +33,10 @@ function App() {
 
   return (
     <BrowserRouter>
+      <Navbar />
       <Routes>
         <Route path="/" element={<Navigate to="/login" />} />
+        <Route path="/register" element={<Register />} />
         <Route
           path="/login"
           element={
@@ -46,7 +49,13 @@ function App() {
         />
         <Route
           path="/dashboard"
-          element={isAuthenticated ? <Dashboard /> : <Navigate to="/login" />}
+          element={
+            isAuthenticated ? (
+              <Dashboard setIsAuthenticated={setIsAuthenticated} />
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
         />
       </Routes>
     </BrowserRouter>
