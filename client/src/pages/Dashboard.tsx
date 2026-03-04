@@ -110,7 +110,7 @@ export default function Dashboard({ setIsAuthenticated }: DashboardProps) {
       console.log(data);
       setStatus(status);
       setJobs((prev) =>
-        prev.map((job) => (job.id === id ? { ...jobs, status: status } : job)),
+        prev.map((job) => (job.id === id ? { ...job, status: status } : job)),
       );
     } else {
       console.log(data.error);
@@ -183,7 +183,7 @@ export default function Dashboard({ setIsAuthenticated }: DashboardProps) {
             <p className="">{job.company}</p>
             <p className="">{job.role}</p>
             <p>{job.status}</p>
-            <p>{}</p>
+            <p>{job.dateApplied}</p>
             <div className="flex gap-2">
               <button
                 onClick={() => patchStatus(job.id)}

@@ -7,11 +7,14 @@ import Navbar from "./components/Navbar";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [authLoading, setAuthLoading] = useState(true);
 
   useEffect(() => {
     async function verify() {
       const token = localStorage.getItem("token");
+      console.log("token:", token);
       if (!token) {
+        setAuthLoading(false);
         return;
       }
       const res = await fetch("http://localhost:3000/auth/me", {
@@ -20,16 +23,22 @@ function App() {
           Authorization: `Bearer ${token}`,
         },
       });
-
+      console.log("auth/me status:", res.status);
       if (res.ok) {
         setIsAuthenticated(true);
-      } else {
+      } else if (res.status === 401 || res.status === 403) {
         localStorage.removeItem("token");
       }
+
+      setAuthLoading(false);
     }
 
     verify();
   }, []);
+
+  if (authLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <BrowserRouter>

@@ -16,6 +16,6 @@ const authenticateToken = require('../middleware/authenticateToken')
 
 router.post('/register', jsonParser, checkValidEmail, validateAndHashPassword, register)
 router.post('/login', loginLimit, jsonParser, login)
-router.post('/me', authenticateToken, getMe)
+router.get('/me', authenticateToken, getMe)
 
 module.exports = router

@@ -23,7 +23,7 @@ async function login(req, res) {
     const { email, password } = req.body
     const sql = `SELECT id, password FROM users WHERE email = ?`
 
-    db.get(sql, email, async (err, user) => {
+    db.get(sql, [email], async (err, user) => {
         if (err) {
             return res.status(500).json({error: err.message})
         }
@@ -41,6 +41,7 @@ async function login(req, res) {
             process.env.JWT_SECRET,
             { expiresIn: '1h'}
         )
+        console.log('login successful')
         res.json({token})
     })
 }

@@ -13,7 +13,7 @@ function authenticateToken(req, res, next) {
             return res.status(403).json({error: 'Invalid token'})
         }
     
-        console.log(payload)
+        console.log(`authenticate token payload: ${payload}`)
         req.user = payload
         next()
     })
