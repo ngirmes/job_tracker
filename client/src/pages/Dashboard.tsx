@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { data, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Trash2 } from "lucide-react";
 
 type DashboardProps = {
@@ -157,7 +157,7 @@ export default function Dashboard({ setIsAuthenticated }: DashboardProps) {
         <button
           disabled={page * limit >= total}
           onClick={() => setPage(page + 1)}
-          className="border-2 rounded-lg border-black p-2 hover:border-green-500"
+          className="border-2 rounded-lg border-black p-2 hover:border-green-500 mr-2"
         >
           Next
         </button>
