@@ -3,7 +3,8 @@ import { useEffect, useState } from "react";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
-//import Navbar from "./components/Navbar";
+// import Subscriptions from "./pages/Subscriptions";
+import Navbar from "./components/Navbar";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -42,10 +43,9 @@ function App() {
 
   return (
     <BrowserRouter>
-      {/*<Navbar />*/}
+      {isAuthenticated && <Navbar />}
       <Routes>
         <Route path="/" element={<Navigate to="/login" />} />
-        <Route path="/register" element={<Register />} />
         <Route
           path="/login"
           element={
@@ -56,6 +56,8 @@ function App() {
             )
           }
         />
+        <Route path="/register" element={<Register />} />
+
         <Route
           path="/dashboard"
           element={
@@ -66,6 +68,16 @@ function App() {
             )
           }
         />
+        {/*<Route
+          path="/subscriptions"
+          element={
+            isAuthenticated ? (
+              <Subscriptions setIsAuthenticated={setIsAuthenticated} />
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />*/}
       </Routes>
     </BrowserRouter>
   );

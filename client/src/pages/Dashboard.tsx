@@ -14,7 +14,7 @@ export default function Dashboard({ setIsAuthenticated }: DashboardProps) {
   const [company, setCompany] = useState("");
   const [role, setRole] = useState("");
   const [status, setStatus] = useState("");
-  const [newStatus, setNewStatus] = useState("")
+  const [newStatus, setNewStatus] = useState("");
   const [dateApplied, setDateApplied] = useState("");
   const navigate = useNavigate();
 
@@ -98,12 +98,12 @@ export default function Dashboard({ setIsAuthenticated }: DashboardProps) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        status: newStatus
+        status: newStatus,
       }),
     });
-    console.log('test1')
+    console.log("test1");
     const data = await res.json();
-    console.log('test2')
+    console.log("test2");
     if (res.status === 401) {
       localStorage.removeItem("token");
       navigate("/login");
@@ -112,9 +112,11 @@ export default function Dashboard({ setIsAuthenticated }: DashboardProps) {
     if (res.ok) {
       console.log(data);
       setJobs((prev) =>
-        prev.map((job) => (job.id === id ? { ...job, status: newStatus } : job)),
+        prev.map((job) =>
+          job.id === id ? { ...job, status: newStatus } : job,
+        ),
       );
-      setNewStatus("")
+      setNewStatus("");
     } else {
       console.log(data.error);
     }
@@ -158,20 +160,20 @@ export default function Dashboard({ setIsAuthenticated }: DashboardProps) {
     <div className="grid grid-cols-3 gap-8 p-8 border-4 border-black">
       <div className="col-span-2">
         <div className="flex items-center gap-2 mb-4">
-        <button
-          disabled={page * limit >= total}
-          onClick={() => setPage(page + 1)}
-          className="border-2 rounded-lg border-black p-2 hover:border-green-500 mr-2"
-        >
-          Next
-        </button>
-        <button
-          disabled={page === 1}
-          onClick={() => setPage(page - 1)}
-          className="border-2 rounded-lg border-black p-2 hover:border-green-500"
-        >
-          Previous
-        </button>
+          <button
+            disabled={page * limit >= total}
+            onClick={() => setPage(page + 1)}
+            className="border-2 rounded-lg border-black p-2 hover:border-green-500 mr-2"
+          >
+            Next
+          </button>
+          <button
+            disabled={page === 1}
+            onClick={() => setPage(page - 1)}
+            className="border-2 rounded-lg border-black p-2 hover:border-green-500"
+          >
+            Previous
+          </button>
           <p>New Status:</p>
           <input
             type="text"

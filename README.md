@@ -4,13 +4,20 @@ A full-stack CRUD web application for tracking job applications with multi-user 
 
 ## Tech Stack
 
-### Frontend: 
-- React with tailwind and lucide — dynamic UI for job management 
-### Backend: 
+### Frontend:
+
+- React with tailwind and lucide — dynamic UI for job management
+
+### Backend:
+
 - Node.js + Express — RESTful API with modular routes and middleware
-### Database: 
+
+### Database:
+
 - SQLite — persistent storage with relational tables (users, jobs)
+
 ### Authentication & Security:
+
 - Password hashing with bcrypt
 - JWT authentication
 - Email verification via unique tokens (in progress)
