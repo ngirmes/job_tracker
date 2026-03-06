@@ -14,6 +14,7 @@ export default function Dashboard({ setIsAuthenticated }: DashboardProps) {
   const [company, setCompany] = useState("");
   const [role, setRole] = useState("");
   const [status, setStatus] = useState("");
+  const [newStatus, setNewStatus] = useState("")
   const [dateApplied, setDateApplied] = useState("");
   const navigate = useNavigate();
 
@@ -94,13 +95,15 @@ export default function Dashboard({ setIsAuthenticated }: DashboardProps) {
       method: "PATCH",
       headers: {
         Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        status,
+        status: newStatus
       }),
     });
-
+    console.log('test1')
     const data = await res.json();
+    console.log('test2')
     if (res.status === 401) {
       localStorage.removeItem("token");
       navigate("/login");
@@ -108,10 +111,10 @@ export default function Dashboard({ setIsAuthenticated }: DashboardProps) {
 
     if (res.ok) {
       console.log(data);
-      setStatus(status);
       setJobs((prev) =>
-        prev.map((job) => (job.id === id ? { ...job, status: status } : job)),
+        prev.map((job) => (job.id === id ? { ...job, status: newStatus } : job)),
       );
+      setNewStatus("")
     } else {
       console.log(data.error);
     }
@@ -154,6 +157,7 @@ export default function Dashboard({ setIsAuthenticated }: DashboardProps) {
   return (
     <div className="grid grid-cols-3 gap-8 p-8 border-4 border-black">
       <div className="col-span-2">
+        <div className="flex items-center gap-2 mb-4">
         <button
           disabled={page * limit >= total}
           onClick={() => setPage(page + 1)}
@@ -168,6 +172,15 @@ export default function Dashboard({ setIsAuthenticated }: DashboardProps) {
         >
           Previous
         </button>
+          <p>New Status:</p>
+          <input
+            type="text"
+            placeholder="New Status"
+            value={newStatus}
+            onChange={(e) => setNewStatus(e.target.value)}
+            className="border p-2"
+          />
+        </div>
         <div className="grid grid-cols-5 gap-4">
           <p className="font-bold">Company</p>
           <p className="font-bold">Role</p>

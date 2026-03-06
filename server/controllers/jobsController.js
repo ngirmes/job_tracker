@@ -68,22 +68,22 @@ async function postJob(req, res) {
 
 async function patchJob(req, res) {
 
+    console.log('test1')
     const user_ID = req.user.user_ID
     const { id } = req.params
     const { status } = req.body
     const sql = `UPDATE jobs SET status = ? WHERE user_ID = ? AND id = ?`
+    console.log('test2')
 
     db.run(sql, [status, user_ID, id], function (err) {
         if (err) {
-            res.status(500).json({error: err.message})
+            return res.status(500).json({error: err.message})
         }
-        else if (this.changes === 0) {
-            res.status(404).json({error: 'Job not found'})
+        if (this.changes === 0) {
+            return res.status(404).json({error: 'Job not found'})
         }
-        else {
-            cache.flushAll()
-            res.json({message: 'Job updated'})
-        }
+        cache.flushAll()
+        return res.json({message: 'Job updated'})
     })
 }
 
