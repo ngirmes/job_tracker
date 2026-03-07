@@ -5,7 +5,8 @@ const sqlite3 = require("sqlite3").verbose();
 const db = new sqlite3.Database("../jobs.db");
 
 db.serialize(() => {
-  db.run(`CREATE TABLE IF NOT EXISTS subscriptions
+  db.run(`CREATE INDEX idx_jobs_user_id ON jobs(user_id)`);
+  /*db.run(`CREATE TABLE IF NOT EXISTS subscriptions
         (
             user_ID INTEGER PRIMARY KEY,
             plan TEXT NOT NULL,
@@ -14,5 +15,5 @@ db.serialize(() => {
             billing_cycle TEXT NOT NULL,
             next_billing_date TEXT NOT NULL,
             
-        )`);
+        )`);*/
 });
