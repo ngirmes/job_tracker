@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import logo from "../assets/hunters.svg";
 
 type LoginProps = {
   setIsAuthenticated: (value: boolean) => void;
@@ -32,10 +32,12 @@ export default function Login({ setIsAuthenticated }: LoginProps) {
   }
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-violet-200 via-violet-400 to-violet-200 flex items-center justify-center">
+    <div className="min-h-screen bg-gradient-to-br from-blue-200 via-neutral-100 via-50% to-blue-200 flex flex-col items-center justify-center gap-6">
+      <img src={logo} className="w-40 h-40" />
+
       <form
         onSubmit={handleSubmit}
-        className="rounded-lg border-neutral-800 border-6 bg-neutral-200 p-8 max-w-md mx-auto absolute color-slate shadow-2xl"
+        className="rounded-lg border-neutral-800 border-4 bg-neutral-200 p-8 max-w-md w-full shadow-2xl"
       >
         <input
           type="email"
@@ -53,13 +55,14 @@ export default function Login({ setIsAuthenticated }: LoginProps) {
           className="border p-2 w-full mb-4"
         />
 
-        <button className="bg-stone-900 text-white hover:bg-violet-400 px-4 py-2 w-full">
+        <button className="bg-stone-900 text-white hover:bg-blue-300 hover:text-black hover:border-2 hover:border-black px-4 py-2 w-full">
           Login
         </button>
+
         <button
           type="button"
           onClick={() => navigate("/register")}
-          className="bg-stone-900 text-white hover:bg-violet-400 px-4 py-2 gap-y-4 w-full"
+          className="bg-stone-900 text-white hover:bg-blue-300 hover:text-black hover:border-2 hover:border-black px-4 py-2 w-full mt-3"
         >
           Register
         </button>

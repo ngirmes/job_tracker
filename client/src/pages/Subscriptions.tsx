@@ -8,6 +8,7 @@ type SubscriptionsProps = {
 export default function Subscriptions({
   setIsAuthenticated,
 }: SubscriptionsProps) {
+  const token = localStorage.getItem("token");
   const plans = {
     oneMonth: 14.99,
     sixMonths: 5.99,

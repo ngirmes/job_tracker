@@ -1,25 +1,42 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Menu } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import logo from "../assets/hunters.svg";
 
-export default function Navbar() {
+type NavbarProps = {
+  setIsAuthenticated: (value: boolean) => void;
+};
+
+export default function Navbar({ setIsAuthenticated }: NavbarProps) {
+  const navigate = useNavigate();
   const [navDropdown, setNavDropdown] = useState(false);
+
+  async function logout() {
+    localStorage.removeItem("token");
+    setIsAuthenticated(false);
+  }
 
   return (
     <>
       <header className="w-full border-b border-neutral-300 p-4 bg-white">
         <div className="max-w-6xl mx-auto flex justify-between items-center">
-          <h1 className="font-bold text-lg">Job Tracker</h1>
+          <button onClick={() => navigate("/dashboard")}>
+            <img src={logo} className="w-16 h-16 cursor-pointer" />
+          </button>
           <div className="text-sm text-neutral-600">
             Nicholas Girmes • email@example.com
           </div>
           <div className="relative">
-            <button onClick={() => setNavDropdown((prev) => !prev)}>
-              <Menu size={24} />
+            <button
+              onClick={() => setNavDropdown((prev) => !prev)}
+              className="hover:text-blue-300"
+            >
+              <Menu size={36} />
             </button>
 
             {navDropdown && (
-              <div className="absolute grid grid-flow-col grid-rows-3 bg-neutral-200 border-2 border-black p-2 ">
+              <div className="absolute grid grid-flow-col grid-rows-4 bg-neutral-200 border-2 border-black p-2 ">
                 <Link to="/profile" className="hover:text-sky-500">
                   Profile
                 </Link>
@@ -29,7 +46,11 @@ export default function Navbar() {
                 <Link to="/jobsearch" className="hover:text-sky-500">
                   Job search
                 </Link>
-                <Link to="/jobsearch" className="hover:text-sky-500">
+                <Link
+                  to="/login"
+                  onClick={() => logout()}
+                  className="hover:text-sky-500"
+                >
                   Logout
                 </Link>
               </div>

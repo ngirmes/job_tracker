@@ -16,7 +16,6 @@ export default function Dashboard({ setIsAuthenticated }: DashboardProps) {
   const [status, setStatus] = useState("");
   const [newStatus, setNewStatus] = useState("");
   const [dateApplied, setDateApplied] = useState("");
-  const navigate = useNavigate();
 
   useEffect(() => {
     getJobs();
@@ -44,7 +43,7 @@ export default function Dashboard({ setIsAuthenticated }: DashboardProps) {
     const data = await res.json();
     if (res.status === 401) {
       localStorage.removeItem("token");
-      navigate("/login");
+      setIsAuthenticated(false);
     }
     setTotal(data.row.total);
     setJobs(data.rows);
@@ -73,7 +72,7 @@ export default function Dashboard({ setIsAuthenticated }: DashboardProps) {
 
     if (res.status === 401) {
       localStorage.removeItem("token");
-      navigate("/login");
+      setIsAuthenticated(false);
     } else if (res.ok) {
       console.log("Job posted succesfully", data);
       await getJobs();
@@ -106,7 +105,7 @@ export default function Dashboard({ setIsAuthenticated }: DashboardProps) {
     console.log("test2");
     if (res.status === 401) {
       localStorage.removeItem("token");
-      navigate("/login");
+      setIsAuthenticated(false);
     }
 
     if (res.ok) {
@@ -138,7 +137,7 @@ export default function Dashboard({ setIsAuthenticated }: DashboardProps) {
 
     if (res.status === 401) {
       localStorage.removeItem("token");
-      navigate("/login");
+      setIsAuthenticated(false);
     }
 
     // If 204 is returned
@@ -157,110 +156,112 @@ export default function Dashboard({ setIsAuthenticated }: DashboardProps) {
   }
 
   return (
-    <div className="grid grid-cols-3 gap-8 p-8 border-4 border-black">
-      <div className="col-span-2">
-        <div className="flex items-center gap-2 mb-4">
-          <button
-            disabled={page * limit >= total}
-            onClick={() => setPage(page + 1)}
-            className="border-2 rounded-lg border-black p-2 hover:border-green-500 mr-2"
-          >
-            Next
-          </button>
-          <button
-            disabled={page === 1}
-            onClick={() => setPage(page - 1)}
-            className="border-2 rounded-lg border-black p-2 hover:border-green-500"
-          >
-            Previous
-          </button>
-          <p>New Status:</p>
-          <input
-            type="text"
-            placeholder="New Status"
-            value={newStatus}
-            onChange={(e) => setNewStatus(e.target.value)}
-            className="border p-2"
-          />
-        </div>
-        <div className="grid grid-cols-5 gap-4">
-          <p className="font-bold">Company</p>
-          <p className="font-bold">Role</p>
-          <p className="font-bold">Status</p>
-          <p className="font-bold">Date Applied</p>
-          <p className="font-bold">Actions</p>
-        </div>
-        {jobs.map((job) => (
-          <div
-            key={job.id}
-            className="grid grid-cols-5 gap-4 py-2 items-center"
-          >
-            <p className="">{job.company}</p>
-            <p className="">{job.role}</p>
-            <p>{job.status}</p>
-            <p>{job.dateApplied}</p>
-            <div className="flex gap-2">
-              <button
-                onClick={() => patchStatus(job.id)}
-                className="border-2 rounded-lg border-black p-2 hover:border-green-500"
-              >
-                Update status
-              </button>
-              <button
-                onClick={() => deleteJob(job.id)}
-                className="border-2 rounded-lg border-black p-2 hover:border-red-500"
-              >
-                <Trash2 size={14} />
-              </button>
-            </div>
+    <div className="min-h-screen bg-gradient-to-br from-blue-200 via-neutral-100 via-50% to-blue-200">
+      <div className="grid grid-cols-3 gap-8 p-8 border-4 border-black">
+        <div className="col-span-2">
+          <div className="flex items-center gap-2 mb-4">
+            <button
+              disabled={page * limit >= total}
+              onClick={() => setPage(page + 1)}
+              className="border-2 rounded-lg border-black p-2 hover:border-green-500 mr-2"
+            >
+              Next
+            </button>
+            <button
+              disabled={page === 1}
+              onClick={() => setPage(page - 1)}
+              className="border-2 rounded-lg border-black p-2 hover:border-green-500"
+            >
+              Previous
+            </button>
+            <p>New Status:</p>
+            <input
+              type="text"
+              placeholder="New Status"
+              value={newStatus}
+              onChange={(e) => setNewStatus(e.target.value)}
+              className="border p-2"
+            />
           </div>
-        ))}
+          <div className="grid grid-cols-5 gap-4">
+            <p className="font-bold">Company</p>
+            <p className="font-bold">Role</p>
+            <p className="font-bold">Status</p>
+            <p className="font-bold">Date Applied</p>
+            <p className="font-bold">Actions</p>
+          </div>
+          {jobs.map((job) => (
+            <div
+              key={job.id}
+              className="grid grid-cols-5 gap-4 py-2 items-center"
+            >
+              <p className="">{job.company}</p>
+              <p className="">{job.role}</p>
+              <p>{job.status}</p>
+              <p>{job.dateApplied}</p>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => patchStatus(job.id)}
+                  className="border-2 rounded-lg border-black p-2 hover:border-green-500"
+                >
+                  Update status
+                </button>
+                <button
+                  onClick={() => deleteJob(job.id)}
+                  className="border-2 rounded-lg border-black p-2 hover:border-red-500"
+                >
+                  <Trash2 size={14} />
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="col-span-1">
+          <form onSubmit={postJob} className="p-8 max-w-md mx-auto">
+            <input
+              type="company"
+              placeholder="Company"
+              value={company}
+              onChange={(e) => setCompany(e.target.value)}
+              className="border p-2 w-full mb-4"
+            />
+
+            <input
+              type="role"
+              placeholder="Role"
+              value={role}
+              onChange={(e) => setRole(e.target.value)}
+              className="border p-2 w-full mb-4"
+            />
+
+            <input
+              type="status"
+              placeholder="Status"
+              value={status}
+              onChange={(e) => setStatus(e.target.value)}
+              className="border p-2 w-full mb-4"
+            />
+
+            <input
+              type="dateApplied"
+              placeholder="Date Applied"
+              value={dateApplied}
+              onChange={(e) => setDateApplied(e.target.value)}
+              className="border p-2 w-full mb-4"
+            />
+            <button className="px-4 py-2 w-full border-2 rounded-lg border-black p-2 hover:border-green-500">
+              Submit New Job
+            </button>
+          </form>
+        </div>
+        <button
+          onClick={() => logout()}
+          className="px-4 py-2 w-full border-2 rounded-lg border-black p-2 hover:border-blue-500"
+        >
+          Logout
+        </button>
       </div>
-
-      <div className="col-span-1">
-        <form onSubmit={postJob} className="p-8 max-w-md mx-auto">
-          <input
-            type="company"
-            placeholder="Company"
-            value={company}
-            onChange={(e) => setCompany(e.target.value)}
-            className="border p-2 w-full mb-4"
-          />
-
-          <input
-            type="role"
-            placeholder="Role"
-            value={role}
-            onChange={(e) => setRole(e.target.value)}
-            className="border p-2 w-full mb-4"
-          />
-
-          <input
-            type="status"
-            placeholder="Status"
-            value={status}
-            onChange={(e) => setStatus(e.target.value)}
-            className="border p-2 w-full mb-4"
-          />
-
-          <input
-            type="dateApplied"
-            placeholder="Date Applied"
-            value={dateApplied}
-            onChange={(e) => setDateApplied(e.target.value)}
-            className="border p-2 w-full mb-4"
-          />
-          <button className="px-4 py-2 w-full border-2 rounded-lg border-black p-2 hover:border-green-500">
-            Submit New Job
-          </button>
-        </form>
-      </div>
-      <button
-        onClick={() => logout()}
-        className="px-4 py-2 w-full border-2 rounded-lg border-black p-2 hover:border-blue-500"
-      >
-        Logout
-      </button>
     </div>
   );
 }

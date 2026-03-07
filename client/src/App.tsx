@@ -43,7 +43,7 @@ function App() {
 
   return (
     <BrowserRouter>
-      {isAuthenticated && <Navbar />}
+      {isAuthenticated && <Navbar setIsAuthenticated={setIsAuthenticated} />}
       <Routes>
         <Route path="/" element={<Navigate to="/login" />} />
         <Route
