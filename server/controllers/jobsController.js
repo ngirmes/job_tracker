@@ -98,4 +98,29 @@ async function deleteJob(req, res) {
   });
 }
 
-module.exports = { getJobs, postJob, patchJob, deleteJob };
+async function searchJobs(req, res) {
+  const { what, where, distance } = req.query;
+
+  try {
+    const response = await fetch(
+      `https://api.adzuna.com/v1/api/jobs/us/search/1?app_id=${process.env.adzunaID}&app_key=${process.env.adzunaKey}&what=${what}&where=${where}&distance=${distance}`,
+      {
+        method: "GET",
+      },
+    );
+
+    if (!response.ok) {
+      res.status(500).json({ error: "Failed to fetch jobs" });
+    }
+
+    const data = await response.json();
+
+    console.log(data);
+    res.status(200).json({ adzunaJobs: data });
+    // res.status(200).json({ data });
+  } catch (err) {
+    res.status(500).json({ err: err.message });
+  }
+}
+
+module.exports = { getJobs, postJob, patchJob, deleteJob, searchJobs };

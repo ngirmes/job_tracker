@@ -6,6 +6,7 @@ const {
   postJob,
   patchJob,
   deleteJob,
+  searchJobs,
 } = require("../controllers/jobsController");
 
 const authenticateToken = require("../middleware/authenticateToken");
@@ -14,6 +15,8 @@ const validateUserExists = require("../middleware/validateUserExists");
 const validateParamStatus = require("../middleware/validateParamStatus");
 
 router.get("/", authenticateToken, getJobs);
+
+router.get("/ads", authenticateToken, searchJobs);
 // Create a new job for a specific user
 router.post("/", authenticateToken, jsonParser, validateParamStatus, postJob);
 // Update a job’s status
