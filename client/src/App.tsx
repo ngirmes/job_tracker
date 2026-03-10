@@ -4,6 +4,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 // import Subscriptions from "./pages/Subscriptions";
+// import Ads.tsx from "./pages/Ads"
 import Navbar from "./components/Navbar";
 
 function App() {
@@ -73,6 +74,16 @@ function App() {
           element={
             isAuthenticated ? (
               <Subscriptions setIsAuthenticated={setIsAuthenticated} />
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />*/}
+        {/*<Route
+          path="/ads"
+          element={
+            isAuthenticated ? (
+              <Ads setIsAuthenticated={setIsAuthenticated} />
             ) : (
               <Navigate to="/login" />
             )

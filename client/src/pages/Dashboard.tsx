@@ -6,6 +6,14 @@ type DashboardProps = {
   setIsAuthenticated: (value: boolean) => void;
 };
 
+type Job = {
+  id: number;
+  company: string;
+  role: string;
+  status: string;
+  dateApplied: string;
+};
+
 export default function Dashboard({ setIsAuthenticated }: DashboardProps) {
   const [page, setPage] = useState(1);
   const limit = 5;
@@ -158,7 +166,7 @@ export default function Dashboard({ setIsAuthenticated }: DashboardProps) {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-200 via-neutral-100 via-50% to-blue-200">
       <div className="grid grid-cols-3 gap-8 p-8 border-4 border-black">
-        <div className="col-span-2">
+        <div className="col-span-2 bg-neutral-50 border-2 border-black border-lg p-4">
           <div className="flex items-center gap-2 mb-4">
             <button
               disabled={page * limit >= total}
@@ -217,7 +225,7 @@ export default function Dashboard({ setIsAuthenticated }: DashboardProps) {
           ))}
         </div>
 
-        <div className="col-span-1">
+        <div className="col-span-1 bg-neutral-50 border-2 border-black">
           <form onSubmit={postJob} className="p-8 max-w-md mx-auto">
             <input
               type="company"
@@ -257,7 +265,7 @@ export default function Dashboard({ setIsAuthenticated }: DashboardProps) {
         </div>
         <button
           onClick={() => logout()}
-          className="px-4 py-2 w-full border-2 rounded-lg border-black p-2 hover:border-blue-500"
+          className="px-4 py-2 w-full bg-neutral-50 border-2 rounded-lg border-black p-2 hover:border-blue-500"
         >
           Logout
         </button>
