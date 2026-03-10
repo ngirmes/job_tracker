@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Trash2 } from "lucide-react";
+import { MousePointerClick, Trash2 } from "lucide-react";
 
 type DashboardProps = {
   setIsAuthenticated: (value: boolean) => void;
@@ -18,7 +18,7 @@ export default function Dashboard({ setIsAuthenticated }: DashboardProps) {
   const [page, setPage] = useState(1);
   const limit = 5;
   const [total, setTotal] = useState(0);
-  const [jobs, setJobs] = useState<any[]>([]);
+  const [jobs, setJobs] = useState<Job[]>([]);
   const [company, setCompany] = useState("");
   const [role, setRole] = useState("");
   const [status, setStatus] = useState("");
@@ -34,6 +34,8 @@ export default function Dashboard({ setIsAuthenticated }: DashboardProps) {
       setPage((p) => p - 1);
     }
   }, [jobs]);
+
+  console.log(event);
 
   async function getJobs() {
     const token = localStorage.getItem("token");
