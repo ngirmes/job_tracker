@@ -39,7 +39,7 @@ export default function Navbar({ setIsAuthenticated }: NavbarProps) {
                 <Link to="/subscriptions" className="hover:text-blue-400">
                   Subscriptions
                 </Link>
-                <Link to="/jobsearch" className="hover:text-blue-400">
+                <Link to="/ads" className="hover:text-blue-400">
                   Job search
                 </Link>
                 <Link

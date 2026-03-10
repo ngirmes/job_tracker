@@ -98,15 +98,12 @@ async function deleteJob(req, res) {
   });
 }
 
-async function searchJobs(req, res) {
+async function searchAds(req, res) {
   const { what, where, distance } = req.query;
 
   try {
     const response = await fetch(
       `https://api.adzuna.com/v1/api/jobs/us/search/1?app_id=${process.env.adzunaID}&app_key=${process.env.adzunaKey}&what=${what}&where=${where}&distance=${distance}`,
-      {
-        method: "GET",
-      },
     );
 
     if (!response.ok) {
@@ -114,13 +111,11 @@ async function searchJobs(req, res) {
     }
 
     const data = await response.json();
-
-    console.log(data);
-    res.status(200).json({ adzunaJobs: data });
+    res.status(200).json({ ads: data.results });
     // res.status(200).json({ data });
   } catch (err) {
     res.status(500).json({ err: err.message });
   }
 }
 
-module.exports = { getJobs, postJob, patchJob, deleteJob, searchJobs };
+module.exports = { getJobs, postJob, patchJob, deleteJob, searchAds };

@@ -4,7 +4,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 // import Subscriptions from "./pages/Subscriptions";
-// import Ads.tsx from "./pages/Ads"
+import Ads from "./pages/Ads";
 import Navbar from "./components/Navbar";
 
 function App() {
@@ -58,7 +58,6 @@ function App() {
           }
         />
         <Route path="/register" element={<Register />} />
-
         <Route
           path="/dashboard"
           element={
@@ -79,7 +78,7 @@ function App() {
             )
           }
         />*/}
-        {/*<Route
+        <Route
           path="/ads"
           element={
             isAuthenticated ? (
@@ -88,7 +87,8 @@ function App() {
               <Navigate to="/login" />
             )
           }
-        />*/}
+        />
+        *
       </Routes>
     </BrowserRouter>
   );
