@@ -62,12 +62,10 @@ async function postJob(req, res) {
 }
 
 async function patchJob(req, res) {
-  console.log("test1");
   const user_ID = req.user.user_ID;
   const { id } = req.params;
   const { status } = req.body;
   const sql = `UPDATE jobs SET status = ? WHERE user_ID = ? AND id = ?`;
-  console.log("test2");
 
   db.run(sql, [status, user_ID, id], function (err) {
     if (err) {

@@ -7,8 +7,8 @@ authLimit = rateLimit({
   windowMs: 15 * 60 * 1000,
   limit: 10,
   message: {
-    error: 'Too many requests. Please try again later.'
-  }
+    error: "Too many requests. Please try again later.",
+  },
 });
 
 const { register, login, getMe } = require("../controllers/authController");
@@ -16,16 +16,19 @@ const jsonParser = require("../middleware/jsonParser");
 const checkUserExists = require("../middleware/checkUserExists");
 const validateAndHashPassword = require("../middleware/validateAndHashPassword");
 const authenticateToken = require("../middleware/authenticateToken");
+const validate = require("../validation/validation");
+const { authSchema } = require("../validation/authSchemas");
 
 router.post(
-  "/register", 
+  "/register",
   authLimit,
+  validate(authSchema),
   jsonParser,
   checkUserExists,
   validateAndHashPassword,
   register,
 );
-router.post("/login", authLimit, jsonParser, login);
+router.post("/login", authLimit, validate(authSchema), jsonParser, login);
 router.get("/me", authenticateToken, getMe);
 
 module.exports = router;

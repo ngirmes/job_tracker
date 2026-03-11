@@ -11,23 +11,41 @@ const {
 
 const authenticateToken = require("../middleware/authenticateToken");
 const jsonParser = require("../middleware/jsonParser");
-const validateUserExists = require("../middleware/validateUserExists");
-const validateParamStatus = require("../middleware/validateParamStatus");
+const validate = require("../validation/validation");
+const {
+  getJobsSchema,
+  postJobSchema,
+  patchStatusSchema,
+  deleteJobSchema,
+  getAdsSchema,
+} = require("../validation/jobsSchemas");
 
-router.get("/", authenticateToken, getJobs);
+router.get("/", authenticateToken, validate(getJobsSchema), getJobs);
 
-router.get("/ads", authenticateToken, searchAds);
+router.get("/ads", authenticateToken, validate(getAdsSchema), searchAds);
 // Create a new job for a specific user
-router.post("/", authenticateToken, jsonParser, validateParamStatus, postJob);
+router.post(
+  "/",
+  authenticateToken,
+  jsonParser,
+  validate(postJobSchema),
+  postJob,
+);
 // Update a job’s status
 router.patch(
   "/:id",
   authenticateToken,
   jsonParser,
-  validateParamStatus,
+  validate(patchStatusSchema),
   patchJob,
 );
 // Delete a job by ID
-router.delete("/:id", authenticateToken, jsonParser, deleteJob);
+router.delete(
+  "/:id",
+  authenticateToken,
+  validate(deleteJobSchema),
+  jsonParser,
+  deleteJob,
+);
 
 module.exports = router;
