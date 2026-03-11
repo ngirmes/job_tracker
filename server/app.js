@@ -3,6 +3,9 @@ const express = require("express");
 const app = express();
 const port = 3000;
 const cors = require("cors");
+const morgan = require("morgan")
+const fs = require("fs")
+const path = require("path")
 // const helmet = require('helmet')
 const { rateLimit } = require("express-rate-limit");
 
@@ -11,7 +14,10 @@ if(process.env.NODE_ENV === 'production') {
     app.use(helmet)
 } */
 
-app.use(cors());
+const logStream = fs.createWriteStream(
+  path.join(__dirname, "server.log"),
+  { flags: "a" }
+);
 
 // Basic rate limiting using express' rate limiter
 rateLimit({
@@ -19,9 +25,11 @@ rateLimit({
   limit: 100,
 });
 
-const myLogger = require("./middleware/myLogger");
-app.use(myLogger);
+// const myLogger = require("./middleware/myLogger");
+// app.use(myLogger);
 
+app.use(cors());
+app.use(morgan("combined", { stream: logStream }));
 app.get("/", (req, res) => {
   res.send("Hello from Express through Nginx 🚀");
 });
