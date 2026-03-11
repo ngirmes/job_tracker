@@ -3,9 +3,12 @@ const express = require("express");
 const router = express.Router();
 const { rateLimit } = require("express-rate-limit");
 
-loginLimit = rateLimit({
+authLimit = rateLimit({
   windowMs: 15 * 60 * 1000,
   limit: 10,
+  message: {
+    error: 'Too many requests. Please try again later.'
+  }
 });
 
 const { register, login, getMe } = require("../controllers/authController");
@@ -15,13 +18,14 @@ const validateAndHashPassword = require("../middleware/validateAndHashPassword")
 const authenticateToken = require("../middleware/authenticateToken");
 
 router.post(
-  "/register",
+  "/register", 
+  authLimit,
   jsonParser,
   checkValidEmail,
   validateAndHashPassword,
   register,
 );
-router.post("/login", loginLimit, jsonParser, login);
+router.post("/login", authLimit, jsonParser, login);
 router.get("/me", authenticateToken, getMe);
 
 module.exports = router;

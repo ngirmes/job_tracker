@@ -6,13 +6,13 @@ const cors = require("cors");
 const morgan = require("morgan")
 const fs = require("fs")
 const path = require("path")
-// const helmet = require('helmet')
+const helmet = require('helmet')
 const { rateLimit } = require("express-rate-limit");
 
-/* If app is in production stage, use helmet for extra security
+// If app is in production stage, use helmet for extra security
 if(process.env.NODE_ENV === 'production') {
     app.use(helmet)
-} */
+} 
 
 const logStream = fs.createWriteStream(
   path.join(__dirname, "server.log"),
