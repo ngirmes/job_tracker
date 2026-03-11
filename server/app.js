@@ -22,8 +22,11 @@ rateLimit({
 const myLogger = require("./middleware/myLogger");
 app.use(myLogger);
 
-app.use("/auth", require("./routes/auth.routes"));
-app.use("/jobs", require("./routes/jobs.routes"));
+app.get("/", (req, res) => {
+  res.send("Hello from Express through Nginx 🚀");
+});
+app.use("/api/auth", require("./routes/auth.routes"));
+app.use("/api/jobs", require("./routes/jobs.routes"));
 
 // Start server
 app.listen(port, () => {

@@ -24,7 +24,6 @@ export default function Ads({ setIsAuthenticated }: Adsprops) {
   const [what, setWhat] = useState("");
   const [where, setWhere] = useState("");
   const [distance, setDistance] = useState("");
-  const [foundJobs, setFoundJobs] = useState(false);
   const [ads, setAds] = useState<Ad[]>([]);
 
   async function handleSubmit(e: React.FormEvent) {
@@ -50,7 +49,6 @@ export default function Ads({ setIsAuthenticated }: Adsprops) {
 
     if (res.ok) {
       setAds(data.ads);
-      setFoundJobs(true);
     }
   }
 

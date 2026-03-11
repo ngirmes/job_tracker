@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState} from "react";
 import { Menu } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/hunters.svg";
