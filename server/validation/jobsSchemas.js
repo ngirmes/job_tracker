@@ -16,13 +16,13 @@ const patchStatusSchema = z.object({
 });
 
 const deleteJobSchema = z.object({
-  id: z.coerce(number),
+  id: z.coerce.number(),
 });
 
 const getAdsSchema = z.object({
   what: z.string(),
   where: z.string(),
-  distance: z.coerce().number(),
+  distance: z.coerce.number(),
 });
 module.exports = {
   getJobsSchema,
