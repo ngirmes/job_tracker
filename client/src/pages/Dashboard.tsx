@@ -35,6 +35,7 @@ export default function Dashboard({ setIsAuthenticated }: DashboardProps) {
   }, [jobs]);
 
   async function getJobs() {
+    console.count("getJobs");
     const token = localStorage.getItem("token");
 
     const res = await fetch(

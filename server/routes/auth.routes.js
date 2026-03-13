@@ -28,13 +28,7 @@ router.post(
   validateAndHashPassword,
   register,
 );
-router.post(
-  "/login",
-  authLimit,
-  jsonParser,
-  validate(authSchema, "login"),
-  login,
-);
+router.post("/login", authLimit, jsonParser, validate(authSchema), login);
 router.get("/me", authenticateToken, getMe);
 
 module.exports = router;

@@ -18,7 +18,6 @@ async function getJobs(req, res) {
   const cachedTotal = cache.get(totalKey);
 
   if (cachedTotal && cachedJobs) {
-    console.log(`jobs for user:${user_ID} are cached`);
     return res.json({ row: cachedTotal, rows: cachedJobs });
   }
 
@@ -35,7 +34,6 @@ async function getJobs(req, res) {
       }
       cache.set(totalKey, row);
       cache.set(jobsKey, rows);
-      console.log({ row, rows });
       res.json({ row, rows });
     });
   });
