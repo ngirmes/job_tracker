@@ -171,16 +171,16 @@ export default function Dashboard({ setIsAuthenticated }: DashboardProps) {
             <button
               disabled={page * limit >= total}
               onClick={() => setPage(page + 1)}
-              className="border-2 rounded-lg border-black p-2 hover:border-green-500 mr-2"
+              className="border-2 rounded-lg border-black p-2 hover:border-green-500 mr-2 disabled:border-grey-100"
             >
-              Next
+              Next Page
             </button>
             <button
               disabled={page === 1}
               onClick={() => setPage(page - 1)}
               className="border-2 rounded-lg border-black p-2 hover:border-green-500"
             >
-              Previous
+              Previous Page
             </button>
             <p>New Status:</p>
             <input
@@ -227,32 +227,39 @@ export default function Dashboard({ setIsAuthenticated }: DashboardProps) {
 
         <div className="col-span-1 bg-neutral-50 border-2 border-black">
           <form onSubmit={postJob} className="p-8 max-w-md mx-auto">
+            <label htmlFor="company">Company</label>
             <input
-              type="company"
+              id="company"
+              type="text"
               placeholder="Company"
               value={company}
               onChange={(e) => setCompany(e.target.value)}
               className="border p-2 w-full mb-4"
             />
 
+            <label htmlFor="role">Role</label>
             <input
-              type="role"
+              id="role"
+              type="text"
               placeholder="Role"
               value={role}
               onChange={(e) => setRole(e.target.value)}
               className="border p-2 w-full mb-4"
             />
 
+            <label htmlFor="status">Status</label>
             <input
-              type="status"
+              id="status"
+              type="text"
               placeholder="Status"
               value={status}
               onChange={(e) => setStatus(e.target.value)}
               className="border p-2 w-full mb-4"
             />
-
+            <label htmlFor="dateApplied">Date Applied</label>
             <input
-              type="dateApplied"
+              id="dateApplied"
+              type="text"
               placeholder="Date Applied"
               value={dateApplied}
               onChange={(e) => setDateApplied(e.target.value)}

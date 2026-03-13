@@ -37,7 +37,7 @@ export default function Login({ setIsAuthenticated }: LoginProps) {
 
       <form
         onSubmit={handleSubmit}
-        className="rounded-lg border-neutral-800 border-4 bg-neutral-200 p-8 max-w-md w-full shadow-2xl"
+        className="rounded-lg border-neutral-800 border-2 bg-neutral-200 p-8 max-w-md w-full shadow-2xl"
       >
         <input
           type="email"

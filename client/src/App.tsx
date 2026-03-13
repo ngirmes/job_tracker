@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
+import Test from "./pages/Test"
+
 // import Subscriptions from "./pages/Subscriptions";
 import Ads from "./pages/Ads";
 import Navbar from "./components/Navbar";
@@ -88,7 +90,9 @@ function App() {
             )
           }
         />
-        *
+        <Route
+        path="/test"
+        element = {<Test />} />
       </Routes>
     </BrowserRouter>
   );
