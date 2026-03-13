@@ -13,16 +13,26 @@ const authenticateToken = require("../middleware/authenticateToken");
 const jsonParser = require("../middleware/jsonParser");
 const validate = require("../validation/validation");
 const {
-  getJobsSchema,
+  paginationSchema,
   postJobSchema,
   patchStatusSchema,
-  deleteJobSchema,
+  jobIDSchema,
   getAdsSchema,
 } = require("../validation/jobsSchemas");
 
-router.get("/", authenticateToken, validate(getJobsSchema), getJobs);
+router.get(
+  "/",
+  authenticateToken,
+  validate(paginationSchema, "query"),
+  getJobs,
+);
 
-router.get("/ads", authenticateToken, validate(getAdsSchema), searchAds);
+router.get(
+  "/ads",
+  authenticateToken,
+  validate(getAdsSchema, "query"),
+  searchAds,
+);
 // Create a new job for a specific user
 router.post(
   "/",
@@ -36,6 +46,7 @@ router.patch(
   "/:id",
   authenticateToken,
   jsonParser,
+  validate(jobIDSchema, "params"),
   validate(patchStatusSchema),
   patchJob,
 );
@@ -43,8 +54,8 @@ router.patch(
 router.delete(
   "/:id",
   authenticateToken,
-  validate(deleteJobSchema),
   jsonParser,
+  validate(jobIDSchema, "params"),
   deleteJob,
 );
 

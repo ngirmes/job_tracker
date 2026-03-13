@@ -22,13 +22,19 @@ const { authSchema } = require("../validation/authSchemas");
 router.post(
   "/register",
   authLimit,
-  validate(authSchema),
   jsonParser,
+  validate(authSchema),
   checkUserExists,
   validateAndHashPassword,
   register,
 );
-router.post("/login", authLimit, validate(authSchema), jsonParser, login);
+router.post(
+  "/login",
+  authLimit,
+  jsonParser,
+  validate(authSchema, "login"),
+  login,
+);
 router.get("/me", authenticateToken, getMe);
 
 module.exports = router;

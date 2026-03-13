@@ -1,25 +1,25 @@
-const db = require('../db/db')
+//Check if a user already exists with specified email (prevents duplicate accounts)
 
-function checkUserExists (req, res, next) {
-    
-    const { email } = req.body
-    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+const db = require("../db/db");
 
-    if(!re.test(email)) {
-        return res.status(400).json({message: 'Invalid email'})
+function checkUserExists(req, res, next) {
+  const { email } = req.body;
+  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  if (!re.test(email)) {
+    return res.status(400).json({ message: "Invalid email" });
+  }
+
+  const sql = `SELECT 1 FROM users WHERE email = ?`;
+
+  db.get(sql, email, (err, row) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    } else if (row) {
+      return res.status(400).json({ message: "User already exists" });
     }
-
-    const sql = `SELECT 1 FROM users WHERE email = ?`
-    
-    db.get(sql, email, (err, row) => {
-        if(err) {
-            return res.status(500).json({error: err.message})
-        }
-        else if (row) {
-            return res.status(400).json({message: 'User already exists'})
-        }
-        next()
-    })
+    next();
+  });
 }
 
-module.exports = checkUserExists
+module.exports = checkUserExists;

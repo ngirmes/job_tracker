@@ -34,8 +34,6 @@ export default function Dashboard({ setIsAuthenticated }: DashboardProps) {
     }
   }, [jobs]);
 
-  console.log(event);
-
   async function getJobs() {
     const token = localStorage.getItem("token");
 
