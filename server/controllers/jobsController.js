@@ -18,14 +18,14 @@ async function getJobs(req, res) {
   const cachedTotal = cache.get(totalKey);
 
   if (cachedTotal && cachedJobs) {
-    return res.json({ row: cachedTotal, rows: cachedJobs });
+    return res.json({ row, rows: cachedJobs });
   }
 
   db.get(sqlCount, [user_ID], (err, row) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     } else if (row.total === 0) {
-      return res.status(400).json({ error: "No jobs found" });
+      return res.json({ row: 0, rows: [] });
     }
 
     db.all(sql, [user_ID, limit, offset], (err, rows) => {

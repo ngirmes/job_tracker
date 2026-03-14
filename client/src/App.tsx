@@ -3,11 +3,12 @@ import { useEffect, useState } from "react";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
-import Test from "./pages/Test"
+import Test from "./pages/Test";
 
 // import Subscriptions from "./pages/Subscriptions";
 import Ads from "./pages/Ads";
 import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -47,30 +48,31 @@ function App() {
   return (
     <BrowserRouter>
       {isAuthenticated && <Navbar setIsAuthenticated={setIsAuthenticated} />}
-      <Routes>
-        <Route path="/" element={<Navigate to="/login" />} />
-        <Route
-          path="/login"
-          element={
-            isAuthenticated ? (
-              <Navigate to="/dashboard" />
-            ) : (
-              <Login setIsAuthenticated={setIsAuthenticated} />
-            )
-          }
-        />
-        <Route path="/register" element={<Register />} />
-        <Route
-          path="/dashboard"
-          element={
-            isAuthenticated ? (
-              <Dashboard setIsAuthenticated={setIsAuthenticated} />
-            ) : (
-              <Navigate to="/login" />
-            )
-          }
-        />
-        {/*<Route
+      <main className="">
+        <Routes>
+          <Route path="/" element={<Navigate to="/login" />} />
+          <Route
+            path="/login"
+            element={
+              isAuthenticated ? (
+                <Navigate to="/dashboard" />
+              ) : (
+                <Login setIsAuthenticated={setIsAuthenticated} />
+              )
+            }
+          />
+          <Route path="/register" element={<Register />} />
+          <Route
+            path="/dashboard"
+            element={
+              isAuthenticated ? (
+                <Dashboard setIsAuthenticated={setIsAuthenticated} />
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          />
+          {/*<Route
           path="/subscriptions"
           element={
             isAuthenticated ? (
@@ -80,20 +82,20 @@ function App() {
             )
           }
         />*/}
-        <Route
-          path="/ads"
-          element={
-            isAuthenticated ? (
-              <Ads setIsAuthenticated={setIsAuthenticated} />
-            ) : (
-              <Navigate to="/login" />
-            )
-          }
-        />
-        <Route
-        path="/test"
-        element = {<Test />} />
-      </Routes>
+          <Route
+            path="/ads"
+            element={
+              isAuthenticated ? (
+                <Ads setIsAuthenticated={setIsAuthenticated} />
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          />
+          <Route path="/test" element={<Test />} />
+        </Routes>
+      </main>
+      <Footer />
     </BrowserRouter>
   );
 }

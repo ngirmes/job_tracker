@@ -7,12 +7,12 @@ const paginationSchema = z.object({
 const postJobSchema = z.object({
   company: z.string(),
   role: z.string(),
-  status: z.enum(["applied", "offer", "rejected", "interviewed"]),
+  status: z.enum(["applied", "offered", "rejected", "interviewed"]),
   dateApplied: z.string(),
 });
 
 const patchStatusSchema = z.object({
-  status: z.enum(["applied", "offer", "rejected", "interviewed"]),
+  status: z.enum(["applied", "offered", "rejected", "interviewed"]),
 });
 
 const jobIDSchema = z.object({
