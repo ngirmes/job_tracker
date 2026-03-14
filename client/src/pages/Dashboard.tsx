@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Trash2 } from "lucide-react";
+import Confetti from "react-confetti";
 
 type DashboardProps = {
   setIsAuthenticated: (value: boolean) => void;
@@ -23,6 +24,20 @@ export default function Dashboard({ setIsAuthenticated }: DashboardProps) {
   const [status, setStatus] = useState("");
   const [newStatus, setNewStatus] = useState("");
   const [dateApplied, setDateApplied] = useState("");
+  const [showConfetti, setShowConfetti] = useState(false);
+  const [confettiSize, setConfettiSize] = useState({ width: 0, height: 0 });
+  const [confettiOpacity, setConfettiOpacity] = useState(1);
+  const [confettiTimer, setConfettiTimer] = useState(5000);
+  const postJobContainerRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (postJobContainerRef.current) {
+      setConfettiSize({
+        width: postJobContainerRef.current.offsetWidth,
+        height: postJobContainerRef.current.offsetHeight,
+      });
+    }
+  }, []);
 
   useEffect(() => {
     getJobs();
@@ -71,7 +86,7 @@ export default function Dashboard({ setIsAuthenticated }: DashboardProps) {
       body: JSON.stringify({
         company,
         role,
-        status,
+        status: "applied",
         dateApplied,
       }),
     });
@@ -83,6 +98,20 @@ export default function Dashboard({ setIsAuthenticated }: DashboardProps) {
       setIsAuthenticated(false);
     } else if (res.ok) {
       console.log("Job posted succesfully", data);
+      setShowConfetti(true);
+      setConfettiTimer(3000);
+      setConfettiOpacity(1);
+      const interval = setInterval(() => {
+        setConfettiTimer((prev) => {
+          if (prev <= 10) {
+            clearInterval(interval);
+          }
+          if (prev <= 1000) {
+            setConfettiOpacity((prev) => Math.max(prev - 0.02, 0));
+          }
+          return prev - 10;
+        });
+      }, 10);
       await getJobs();
 
       // Clear form
@@ -130,10 +159,6 @@ export default function Dashboard({ setIsAuthenticated }: DashboardProps) {
   }
 
   async function deleteJob(id: number) {
-    if (!window.confirm("Delete this job?")) {
-      return;
-    }
-
     const token = localStorage.getItem("token");
 
     const res = await fetch(`http://localhost:3000/jobs/${id}`, {
@@ -165,7 +190,7 @@ export default function Dashboard({ setIsAuthenticated }: DashboardProps) {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-200 via-neutral-100 via-50% to-blue-200">
-      <div className="grid grid-cols-3 gap-8 p-8 border-4 border-black">
+      <div className="grid grid-cols-3 gap-8 p-8 border-2 border-black">
         <div className="col-span-2 bg-neutral-50 border-2 border-black border-lg p-4">
           <div className="flex items-center gap-2 mb-4">
             <button
@@ -225,7 +250,20 @@ export default function Dashboard({ setIsAuthenticated }: DashboardProps) {
           ))}
         </div>
 
-        <div className="col-span-1 bg-neutral-50 border-2 border-black">
+        <div
+          className="col-span-1 bg-neutral-50 border-2 border-black"
+          ref={postJobContainerRef}
+        >
+          <div className="relative">
+            {showConfetti && (
+              <Confetti
+                width={confettiSize.width}
+                height={confettiSize.height}
+                opacity={confettiOpacity}
+                gravity={0.2}
+              />
+            )}
+          </div>
           <form onSubmit={postJob} className="p-8 max-w-md mx-auto">
             <label htmlFor="company">Company</label>
             <input
@@ -247,19 +285,10 @@ export default function Dashboard({ setIsAuthenticated }: DashboardProps) {
               className="border p-2 w-full mb-4"
             />
 
-            <label htmlFor="status">Status</label>
-            <input
-              id="status"
-              type="text"
-              placeholder="Status"
-              value={status}
-              onChange={(e) => setStatus(e.target.value)}
-              className="border p-2 w-full mb-4"
-            />
             <label htmlFor="dateApplied">Date Applied</label>
             <input
               id="dateApplied"
-              type="text"
+              type="date"
               placeholder="Date Applied"
               value={dateApplied}
               onChange={(e) => setDateApplied(e.target.value)}

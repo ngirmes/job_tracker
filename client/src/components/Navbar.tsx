@@ -1,4 +1,4 @@
-import { useState} from "react";
+import { useState } from "react";
 import { Menu } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/hunters.svg";
@@ -18,7 +18,7 @@ export default function Navbar({ setIsAuthenticated }: NavbarProps) {
 
   return (
     <>
-      <header className="w-full p-4 border-b-2 border-black bg-neutral-50">
+      <header className="sticky w-full p-4 border-b-2 border-black bg-neutral-50">
         <div className="grid grid-cols-2">
           <button onClick={() => navigate("/dashboard")}>
             <img src={logo} className="w-16 h-16 cursor-pointer" />
