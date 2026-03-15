@@ -2,10 +2,10 @@
 // Ex: Recreating a table
 
 const sqlite3 = require("sqlite3").verbose();
-const db = new sqlite3.Database("../jobs.db");
+const db = new sqlite3.Database("../data.db");
 
 db.serialize(() => {
-  db.run(`CREATE INDEX idx_jobs_user_id ON jobs(user_id)`);
+  db.run(`ALTER TABLE jobs ADD COLUMN dateApplied TEXT NOT NULL`);
   /*db.run(`CREATE TABLE IF NOT EXISTS subscriptions
         (
             user_ID INTEGER PRIMARY KEY,

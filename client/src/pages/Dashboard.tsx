@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { Trash2 } from "lucide-react";
 import Confetti from "react-confetti";
+import { Navigate } from "react-router-dom";
 
 type DashboardProps = {
   setIsAuthenticated: (value: boolean) => void;
@@ -69,6 +70,7 @@ export default function Dashboard({ setIsAuthenticated }: DashboardProps) {
     if (res.status === 401) {
       localStorage.removeItem("token");
       setIsAuthenticated(false);
+      return <Navigate to="/login" />;
     }
     setTotal(data.row.total);
     setJobs(data.rows);

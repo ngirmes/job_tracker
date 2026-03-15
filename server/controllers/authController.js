@@ -1,13 +1,12 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-require("dotenv").config(); // load env.
 const db = require("../db/db");
 
 async function register(req, res) {
   const { email, password } = req.body;
   const sql = `INSERT INTO users (email, password) VALUES (?, ?)`;
 
-  db.run(sql, email, password, function (err) {
+  db.run(sql, [email, password], function (err) {
     if (err) {
       return res.status(500).json({ error: err.message });
     }

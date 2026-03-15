@@ -14,7 +14,7 @@ authLimit = rateLimit({
 const { register, login, getMe } = require("../controllers/authController");
 const jsonParser = require("../middleware/jsonParser");
 const checkUserExists = require("../middleware/checkUserExists");
-const validateAndHashPassword = require("../middleware/validateAndHashPassword");
+const hashPassword = require("../middleware/hashPassword");
 const authenticateToken = require("../middleware/authenticateToken");
 const validate = require("../validation/validation");
 const { authSchema } = require("../validation/authSchemas");
@@ -25,7 +25,7 @@ router.post(
   jsonParser,
   validate(authSchema),
   checkUserExists,
-  validateAndHashPassword,
+  hashPassword,
   register,
 );
 router.post("/login", authLimit, jsonParser, validate(authSchema), login);

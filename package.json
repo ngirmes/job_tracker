@@ -5,6 +5,12 @@
     "prettier": "3.8.1"
   },
   "scripts": {
+    "dev": "concurrently \"npm run client\" \"npm run server\"",
+    "client": "npm run dev --prefix client",
+    "server": "node server/app.js",
     "format": "prettier --write ."
+  },
+  "dependencies": {
+    "concurrently": "^9.2.1"
   }
 }

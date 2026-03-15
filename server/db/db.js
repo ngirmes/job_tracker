@@ -2,7 +2,7 @@
 const sqlite3 = require("sqlite3").verbose();
 
 // establish connection to database -> returns database object
-const db = new sqlite3.Database("./jobs.db", (err) => {
+const db = new sqlite3.Database("./server/data.db", (err) => {
   if (err) {
     console.error("Error opening database", err);
   } else {
@@ -29,9 +29,11 @@ db.serialize(() => {
             company TEXT NOT NULL,
             role TEXT NOT NULL,
             status TEXT NOT NULL,
+            dateApplied TEXT NOT NULL,
             FOREIGN KEY (user_ID) REFERENCES users(id)
         ) 
     `);
+  db.run(`CREATE INDEX IF NOT EXISTS idx_jobs_user_id ON jobs(user_id)`);
 });
 
 module.exports = db;

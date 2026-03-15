@@ -1,12 +1,18 @@
 // Import Express framework
+require("dotenv").config({ path: __dirname + "/.env" }); // load .env
+
 const express = require("express");
 const app = express();
 const port = 3000;
+
 const cors = require("cors");
+
 const morgan = require("morgan");
 const fs = require("fs");
 const path = require("path");
+
 const helmet = require("helmet");
+
 const { rateLimit } = require("express-rate-limit");
 
 // If app is in production stage, use helmet for extra security
@@ -29,9 +35,7 @@ rateLimit({
 
 app.use(cors());
 app.use(morgan("combined", { stream: logStream }));
-app.get("/", (req, res) => {
-  res.send("Hello from Express through Nginx 🚀");
-});
+
 app.use("/auth", require("./routes/auth.routes"));
 app.use("/jobs", require("./routes/jobs.routes"));
 
