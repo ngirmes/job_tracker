@@ -2,7 +2,7 @@ const { z } = require("zod");
 
 const authSchema = z.object({
   email: z.email(),
-  password: z.string().min(8),
+  password: z.string(),
 });
 
 module.exports = { authSchema };
